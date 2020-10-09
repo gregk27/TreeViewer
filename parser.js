@@ -20,7 +20,7 @@ function parse(raw){
  */
 function parseLevel(data){
     // Get key and value from format (k,v)
-    console.log(data.join(""));
+    // console.log(data.join(""));
     let key = "";
     let tmp = data.shift(); // Remove parenthesis, if empty will be }
     if(tmp == "}"){
@@ -44,7 +44,6 @@ function parseLevel(data){
     while(tmp != "}"){
         if(tmp == "{"){
             let res = parseLevel(data);
-            console.log(res);
             if(res != null){
                 children.push(res);
             }
