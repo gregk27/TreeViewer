@@ -1,6 +1,6 @@
 // import * as visualizer from "./visulaizer";
 
-/** @typedef {{id:string, name:string, data:string, children:Node[]}} Node */
+/** @typedef {{text:{name:string, desc:string}, children:Node[]}} Node */
 
 /** 
  * Parse output from C file
@@ -10,7 +10,7 @@ function parse(raw){
     console.log(`Parsing: ${raw}`)
     let data = raw.split("");
     data.shift(); // Remove first bracket
-    console.log(parseLevel(data));
+    return parseLevel(data);
 }
 
 /** 
@@ -51,5 +51,5 @@ function parseLevel(data){
         }
         tmp = data.shift();
     }
-    return {id:key, name:key, data:value, children};
+    return {text:{name:key, desc:value}, children};
 }

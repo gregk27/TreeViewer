@@ -1,16 +1,57 @@
-<script src="parser.js"></script>
+<html>
+    <head>
+        <title>278 Tree Viewer</title>
+        <link rel="stylesheet" href="treant/Treant.css" type="text/css"/>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="parser.js"></script>
+        <style>
+            .node{
+                border: 2px solid;
+                text-align: center;
+                padding: 5px;
+            }
 
+            .node>*{
+                margin:0;
+            }
 
-<textarea id="input"></textarea>
-<div id="center-container">
-    <div id="infovis"></div>    
-</div>
+            .node-name {
+                font-weight: bold;
+                color:blue;
+            }
 
+        </style>
+    </head>
+    <body style="background-color:rgb(200, 200, 200)">
+        <textarea id="input" style="width:100%; height:10%; margin:auto; display:block; resize:none;"></textarea>
+        <div id="tree-simple" style="width:100%; height:85%; margin:auto; background-color: white;"> </div>
+        <div style="width:100%; height:1em; margin:auto; background-color: white;">Rendered using <a href="https://fperucic.github.io/treant-js/">Treant</a></div>
+    </body>
 
-<script>
-    /** @type {HTMLTextAreaElement} */
-    // let input = document.getElementById("input");
-    // input.oninput = ()=>{parse(input.value)}; 
+    <script src="treant/vendor/raphael.js"></script>
+    <script src="treant/Treant.js"></script>
+    <script>
+        /** @type {HTMLTextAreaElement} */
+        let input = document.getElementById("input");
+        input.oninput = () => {
+                var format = {
+                    chart: {
+                        container: "#tree-simple",
+                        connectors: {
+                            type: "straight",
+                            style: {
+                                "stroke-width": 3
+                            }
+                        },
+                        node: {
+                            collapsable: true
+                        }
+                    },
 
-    parse("{(5,e),{(3,c),{},{(1,a),{},{}}},{(7,g),{},{}}}")
-</script>
+                    nodeStructure: parse(input.value)
+                };
+                var my_chart = new Treant(format);
+            }; 
+
+    </script>
+</html>
