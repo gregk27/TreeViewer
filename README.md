@@ -6,3 +6,5 @@ The following input:
 Would be rendered as:
 
 ![Image](https://i.imgur.com/WQqA9Vg.png)
+
+Rendering is done by [Treant](https://fperucic.github.io/treant-js/)
