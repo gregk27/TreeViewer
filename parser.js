@@ -5,24 +5,51 @@
 /** 
  * Parse output from C file
  * @param {string} raw
- * @returns {Node}
  */
 function parse(raw){
     console.log(`Parsing: ${raw}`)
-    // Get node data
-    let nd = raw.substring(raw.indexOf("(")+1, raw.indexOf(")"));
-    let nodeID = parseInt(nd.split(",")[0]);
-    let nodeName = nodeID;
-    let data = nd.split(",")[1];
-    
-    // Chop of start
-    raw = raw.substring(raw.indexOf(")")+1);
+    let data = raw.split("");
+    data.shift(); // Remove first bracket
+    console.log(parseLevel(data));
+}
+
+/** 
+ * Parse output from C file
+ * @param {string[]} data
+ * @returns {Node}
+ */
+function parseLevel(data){
+    // Get key and value from format (k,v)
+    console.log(data.join(""));
+    let key = "";
+    let tmp = data.shift(); // Remove parenthesis, if empty will be }
+    if(tmp == "}"){
+        return null;
+    }
+    tmp = data.shift();
+    while(tmp != ","){
+        key += tmp;
+        tmp = data.shift();
+    }
+    key = parseInt(key); // Convert key to int
+    let value = "";
+    tmp = data.shift(); // Remove comma
+    while(tmp != ")"){
+        value += tmp;
+        tmp = data.shift();
+    }
 
     /** @type {Node[]} */
     let children = [];
-    while(raw.indexOf("{") != -1){
-
+    while(tmp != "}"){
+        if(tmp == "{"){
+            let res = parseLevel(data);
+            console.log(res);
+            if(res != null){
+                children.push(res);
+            }
+        }
+        tmp = data.shift();
     }
-
-    return {id:nodeID, name:nodeName, data:data, children};
+    return {id:key, name:key, data:value, children};
 }
