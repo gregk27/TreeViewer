@@ -33,7 +33,8 @@
     <script>
         /** @type {HTMLTextAreaElement} */
         let input = document.getElementById("input");
-        input.onchange = () => {
+        input.value = "{(10,Base),{(5,Left),{(6,Left-Left),{},{}},{(6,Left-Right),{},{}}},{(7,Right),{},{}}}";
+        input.oninput = () => {
                 var format = {
                     chart: {
                         container: "#tree-simple",
@@ -52,6 +53,6 @@
                 };
                 var my_chart = new Treant(format);
             }; 
-
+            input.oninput();
     </script>
 </html>
