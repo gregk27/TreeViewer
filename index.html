@@ -20,12 +20,22 @@
                 color:blue;
             }
 
+            .node[data-null=true]>.node-name{
+                color:red;
+            }
         </style>
     </head>
     <body style="background-color:rgb(200, 200, 200)">
         <textarea id="input" style="width:100%; height:10%; margin:auto; display:block; resize:none;"></textarea>
+        <div style="width:100%; height:1em; margin:auto; background-color: white; user-select: none; height:1.5em">
+            <label for="showNulls">Show nulls</label>
+            <input type="checkbox" id="showNulls" checked/>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <label for="showLeafNulls">Show Leaf nulls</label>
+            <input type="checkbox" id="showLeafNulls"/>
+            <span style="float:right">Rendered using <a href="https://fperucic.github.io/treant-js/">Treant</a></span>
+        </div>
         <div id="tree-simple" style="width:100%; height:85%; margin:auto; background-color: white;"> </div>
-        <div style="width:100%; height:1em; margin:auto; background-color: white;">Rendered using <a href="https://fperucic.github.io/treant-js/">Treant</a></div>
     </body>
 
     <script src="treant/vendor/raphael.js"></script>
@@ -33,26 +43,37 @@
     <script>
         /** @type {HTMLTextAreaElement} */
         let input = document.getElementById("input");
+        /** @type {HTMLInputElement} */
+        let showNulls = document.getElementById("showNulls");
+        /** @type {HTMLInputElement} */
+        let showLeafNulls = document.getElementById("showLeafNulls");
         input.value = "{(10,Base),{(5,Left),{(4,Left-Left),{},{}},{(6,Left-Right),{},{}}},{(7,Right),{},{}}}";
-        input.oninput = () => {
-                var format = {
-                    chart: {
-                        container: "#tree-simple",
-                        connectors: {
-                            type: "straight",
-                            style: {
-                                "stroke-width": 3
-                            }
-                        },
-                        node: {
-                            collapsable: true
+
+        function redraw(){
+            console.log("Updating")
+            var format = {
+                chart: {
+                    container: "#tree-simple",
+                    connectors: {
+                        type: "straight",
+                        style: {
+                            "stroke-width": 3
                         }
                     },
+                    node: {
+                        collapsable: true
+                    }
+                },
 
-                    nodeStructure: parse(input.value)
-                };
-                var my_chart = new Treant(format);
-            }; 
-            input.oninput();
+                nodeStructure: parse(input.value, showNulls.checked, showLeafNulls.checked)
+            };
+            var my_chart = new Treant(format);
+        }
+
+
+        input.oninput = redraw;
+        showNulls.onchange = redraw;
+        showLeafNulls.onchange = redraw;
+        redraw();
     </script>
 </html>

@@ -5,20 +5,24 @@
 /** 
  * Parse output from C file
  * @param {string} raw
+ * @param {boolean} showNulls
+ * @param {boolean} showLeafNulls
  */
-function parse(raw){
+function parse(raw, showNulls, showLeafNulls){
     console.log(`Parsing: ${raw}`)
     let data = raw.split("");
     data.shift(); // Remove first bracket
-    return parseLevel(data);
+    return parseLevel(data, showNulls, showLeafNulls);
 }
 
 /** 
  * Parse output from C file
  * @param {string[]} data
+ * @param {boolean} showNulls
+ * @param {boolean} showLeafNulls
  * @returns {Node}
  */
-function parseLevel(data){
+function parseLevel(data, showNulls, showLeafNulls){
     // Get key and value from format (k,v)
     // console.log(data.join(""));
     let key = "";
@@ -42,12 +46,22 @@ function parseLevel(data){
     let children = [];
     while(tmp != "}"){
         if(tmp == "{"){
-            let res = parseLevel(data);
+            let res = parseLevel(data, showNulls, showLeafNulls);
             if(res != null){
                 children.push(res);
+            } else if (showNulls){
+                children.push({text:{"data-null":"true", name:"NULL"}, children:[]});
             }
         }
         tmp = data.shift();
     }
-    return {text:{name:key, desc:value}, children};
+    for(c of children){
+        if(c.text.name !== "NULL"){
+            return {text:{name:key, desc:value}, children};
+        }
+    }
+    if(showLeafNulls){
+        return {text:{name:key, desc:value}, children};
+    }
+    return {text:{name:key, desc:value}, children:[]};
 }
