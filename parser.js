@@ -31,7 +31,6 @@ function parseLevel(data){
         key += tmp;
         tmp = data.shift();
     }
-    key = parseInt(key); // Convert key to int
     let value = "";
     tmp = data.shift(); // Remove comma
     while(tmp != ")"){
